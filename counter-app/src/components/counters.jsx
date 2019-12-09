@@ -1,21 +1,54 @@
 import React, { Component } from "react";
 import Counter from "./counter";
 class Counters extends Component {
+  /*
   state = {
-    counters: [
-      { id: 1, value: 4 },
-      { id: 2, value: 0 },
-      { id: 3, value: 0 },
-      { id: 4, value: 0 }
-    ]
+    counterMap: new Map([
+      [1, 2],
+      [2, 0],
+      [3, 0],
+      [4, 0]
+    ])
   };
+
+  handleIncrement = id => {
+    let newMap = this.state.counterMap;
+    newMap.set(id, newMap.get(id) + 1);
+    this.setState({ counterMap: newMap });
+  };
+
+  handleDelete = id => {
+    let newMap = this.state.counterMap;
+    newMap.delete(id);
+    this.setState({ counterMap: newMap });
+  };
+
+  handleReset = () => {
+    let newMap = this.state.counterMap;
+
+    Array.from(newMap).forEach(([key, value]) => {
+      newMap.set(key, 0);
+    });
+    this.setState({ counterMap: newMap });
+  };*/
+
   render() {
     return (
       <div>
-        {this.state.counters.map(counter => (
-          <Counter key={counter.id} value={counter.value} selected={true}>
-            <h4>Counter {counter.id}</h4>
-          </Counter>
+        <button onClick={() => this.props.onReset()} className="btn btn-danger">
+          Reset
+        </button>
+        <br></br>
+        {Array.from(this.props.counterMap).map(([key, value]) => (
+          <React.Fragment>
+            <Counter
+              counter={{ id: key, value: value }}
+              key={key}
+              onIncrement={this.props.onIncrement}
+              onDelete={this.props.onDelete}
+            ></Counter>
+            <br></br>
+          </React.Fragment>
         ))}
       </div>
     );
