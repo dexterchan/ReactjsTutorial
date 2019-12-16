@@ -33,19 +33,27 @@ class Counters extends Component {
   };*/
 
   render() {
+    const {
+      onIncrement,
+      onDelete,
+      onReset,
+      counterMap,
+      onDecrement
+    } = this.props;
     return (
       <div>
-        <button onClick={() => this.props.onReset()} className="btn btn-danger">
+        <button onClick={() => onReset()} className="btn btn-danger">
           Reset
         </button>
         <br></br>
-        {Array.from(this.props.counterMap).map(([key, value]) => (
-          <React.Fragment>
+        {Array.from(counterMap).map(([key, value]) => (
+          <React.Fragment key={key}>
             <Counter
               counter={{ id: key, value: value }}
               key={key}
-              onIncrement={this.props.onIncrement}
-              onDelete={this.props.onDelete}
+              onIncrement={onIncrement}
+              onDelete={onDelete}
+              onDecrement={onDecrement}
             ></Counter>
             <br></br>
           </React.Fragment>
