@@ -1,8 +1,9 @@
 import React, { Component } from "react";
 import "bootstrap/dist/css/bootstrap.css";
-import Like from "./common/like";
+
 import ListGroup from "./common/listGroup";
 import Pagination from "./common/pagination";
+import MoviesTable from "./moviesTable";
 import { getMovies, deleteMovie, getMovie } from "../services/fakeMovieService";
 import { getGenres, genres } from "../services/fakeGenreService";
 import "./movies.css";
@@ -60,31 +61,6 @@ class Movies extends Component {
     });
   };
 
-  renderEachMovieEachRow = movies => {
-    return movies.map(movie => (
-      <tr key={movie["_id"]}>
-        <th scope="row">{movie["title"]}</th>
-        <td>{movie.genre.name}</td>
-        <td>{movie.numberInStock}</td>
-        <td>{movie.dailyRentalRate}</td>
-        <td>
-          <Like
-            liked={movie.liked}
-            onClick={() => this.handleLiked(movie._id)}
-          />
-        </td>
-        <td>
-          <button
-            onClick={() => this.handleMovieDelete(movie._id)}
-            className="btn btn-danger btn-sm"
-          >
-            Delete
-          </button>
-        </td>
-      </tr>
-    ));
-  };
-
   render() {
     let {
       movies: allMovies,
@@ -114,20 +90,11 @@ class Movies extends Component {
         </div>
         <div className="col">
           <h4>{this.renderTitle(filteredMovies)}</h4>
-
-          <table className="table table-hover">
-            <thead>
-              <tr>
-                <th scope="col">Title</th>
-                <th scope="col">Genre</th>
-                <th scope="col">Stock</th>
-                <th scope="col">Rate</th>
-                <th scope="col"></th>
-                <th scope="col"></th>
-              </tr>
-            </thead>
-            <tbody>{this.renderEachMovieEachRow(movies)}</tbody>
-          </table>
+          <MoviesTable
+            movies={movies}
+            onDeleteMovie={this.handleMovieDelete}
+            onLikeMovie={this.handleLiked}
+          />
           <Pagination
             itemsCount={filteredMovies.length}
             pageSize={pageSize}
