@@ -8,6 +8,7 @@ import { getMovies, deleteMovie, getMovie } from "../services/fakeMovieService";
 import { getGenres, genres } from "../services/fakeGenreService";
 import "./movies.css";
 import { paginate } from "../utils/paginate";
+import _ from "lodash";
 
 class Movies extends Component {
   constructor(props) {
@@ -17,11 +18,12 @@ class Movies extends Component {
       movies: [],
       pageSize: 4,
       currentPage: 1,
-      genres: []
+      genres: [],
+      sortColumn: { path: "title", order: "asc" }
     };
   }
   componentDidMount() {
-    let genreslist = [{ name: "All Genres" }, ...getGenres()];
+    let genreslist = [{ name: "All Genres", _id: "all" }, ...getGenres()];
     let movieslist = getMovies();
     this.setState({
       genres: genreslist,
@@ -60,6 +62,9 @@ class Movies extends Component {
       currentPage: 1
     });
   };
+  handleSort = sortColumn => {
+    this.setState({ sortColumn });
+  };
 
   render() {
     let {
@@ -67,15 +72,21 @@ class Movies extends Component {
       pageSize,
       currentPage,
       genres,
-      selectedGenre
+      selectedGenre,
+      sortColumn
     } = this.state;
 
     const filteredMovies =
-      selectedGenre && selectedGenre._id
+      selectedGenre && selectedGenre._id !== "all"
         ? allMovies.filter(movie => movie.genre._id === selectedGenre._id)
         : allMovies;
 
-    const movies = paginate(filteredMovies, currentPage, pageSize);
+    const sortedMovies = _.orderBy(
+      filteredMovies,
+      [sortColumn.path],
+      [sortColumn.order]
+    );
+    const movies = paginate(sortedMovies, currentPage, pageSize);
 
     return (
       <div className="row">
@@ -92,8 +103,10 @@ class Movies extends Component {
           <h4>{this.renderTitle(filteredMovies)}</h4>
           <MoviesTable
             movies={movies}
+            sortColumn={sortColumn}
             onDeleteMovie={this.handleMovieDelete}
             onLikeMovie={this.handleLiked}
+            onSort={this.handleSort}
           />
           <Pagination
             itemsCount={filteredMovies.length}
