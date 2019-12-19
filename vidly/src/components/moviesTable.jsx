@@ -10,44 +10,22 @@ class MoviesTable extends Component {
     { path: "title", label: "Title" },
     { path: "genre.name", label: "Genre" },
     { path: "numberInStock", label: "Stock" },
-    { path: "dailyRentalRate", label: "Rate" }
+    { path: "dailyRentalRate", label: "Rate" },
+    { key: "like" },
+    { key: "delete" }
   ];
 
-  raiseSort = path => {
-    const newSortColumn = { ...this.props.sortColumn };
-
-    if (newSortColumn.path === path) {
-      newSortColumn.order = newSortColumn.order == "asc" ? "desc" : "asc";
-    } else {
-      newSortColumn.path = path;
-      newSortColumn.order = "asc";
-    }
-    this.props.onSort(newSortColumn);
-  };
-
   render() {
-    const { movies, onDeleteMovie, onLikeMovie } = this.props;
+    const { movies, onDeleteMovie, onLikeMovie, sortColumn } = this.props;
 
     return (
       <table className="table table-hover">
-        <thead>
-          <tr>
-            <th onClick={() => this.raiseSort("title")} scope="col">
-              Title
-            </th>
-            <th onClick={() => this.raiseSort("genre.name")} scope="col">
-              Genre
-            </th>
-            <th onClick={() => this.raiseSort("numberInStock")} scope="col">
-              Stock
-            </th>
-            <th onClick={() => this.raiseSort("dailyRentalRate")} scope="col">
-              Rate
-            </th>
-            <th scope="col"></th>
-            <th scope="col"></th>
-          </tr>
-        </thead>
+        <TableHeader
+          columns={this.columns}
+          sortColumn={sortColumn}
+          onSort={this.props.onSort}
+        />
+
         <tbody>
           {renderEachMovieEachRow(movies, onDeleteMovie, onLikeMovie)}
         </tbody>
