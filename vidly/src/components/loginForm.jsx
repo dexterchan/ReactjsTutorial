@@ -68,21 +68,23 @@ class LoginForm extends Component {
           <Input
             label={"UserName"}
             name={"username"}
-            type={"text"}
-            onChange={this.handleChange}
             value={username}
             error={errors.username}
+            type={"text"}
+            onChange={this.handleChange}
           />
           <Input
             label={"Password"}
             name={"password"}
-            type={"password"}
-            onChange={this.handleChange}
             value={password}
             error={errors.password}
+            type={"password"}
+            onChange={this.handleChange}
           />
 
-          <button className="btn btn-primary">Login</button>
+          <button disabled={this.validate()} className="btn btn-primary">
+            Login
+          </button>
         </form>
       </div>
     );
